@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login_screen.LoginActivity">
+
+    <TextView
+        android:text="Prijava:"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="26sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Korisničko ime"
+        android:layout_marginRight="16dp"
+        android:ems="10"
+
+        android:id="@+id/user_tv" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/password_tv"
+        android:hint="Lozinka"
+        android:layout_marginRight="16dp"/>
+
+    <Button
+        android:text="Prijavi se"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_gravity="center"
+        android:id="@+id/login_btn"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+
+    <TextView
+        android:text="Novi korisnik"
+        android:textSize="17sp"
+        android:textColor="@android:color/holo_green_dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:id="@+id/newuser_tv" />
+
+
+</LinearLayout>

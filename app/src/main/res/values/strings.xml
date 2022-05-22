@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">AndroidChatApp</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="channel_name">chatAppNotificationChannel</string>
+    <string name="channel_description">chatAppNotificationChannelDescription</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="UsersServiceBaseURL">https://usersservicechat.azurewebsites.net/</string>
+    <string name="checkUserName">api/CheckUsername</string>
+    <string name="addUser">api/AddUser</string>
+    <string name="Login">api/Login</string>
+
+    <string name="ChatServiceBaseURL">https://testfunctionappchat.azurewebsites.net/</string>
+    <!--string name="ChatServiceBaseURL">https://3c45-86-32-37-202.eu.ngrok.io/</string-->
+
+    <string name="negotiate">api/negotiate</string>
+    <string name="rejoin">api/rejoinGroups</string>
+    <string name="getAllGroupsUser">api/getAllGroupsUser</string>
+    <string name="getAllUnread">api/GetAllUnread</string>
+
+
+    <string name="getAllUsers">api/getAllFiltered</string>
+
+</resources>
