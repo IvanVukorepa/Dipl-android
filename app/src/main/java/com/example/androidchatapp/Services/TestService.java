@@ -173,6 +173,7 @@ public class TestService extends Service {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
+                        Log.e("error", response.toString());
                         String url = response.getString("url");
                         Log.e("error", "negotiate finished");
                         TestService.pubSubConnectionURL = url;
