@@ -9,18 +9,23 @@ import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.androidchatapp.Models.NewGroup;
 import com.example.androidchatapp.Models.UserGroup;
 import com.example.androidchatapp.R;
 import com.example.androidchatapp.chat_screen.ChatDataStorage;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
 import com.example.androidchatapp.main_screen.ChatsListAdapter;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.internal.$Gson$Preconditions;
+import com.google.gson.internal.bind.JsonTreeReader;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -29,6 +34,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -110,6 +116,37 @@ public class ChatService {
 
             ChatListDataStorage.allChats.add(ChatService.chat);
         }
+    }
+
+    public static void createGroupChat(final Context context, final NewGroup group){
+
+        String url = context.getString(R.string.ChatServiceBaseURL) + context.getString(R.string.createGroup);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(context, "created group " + group.getName(), Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context, "Failed to crate group, error - " + error.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }){
+            @Override
+            public byte[] getBody() {
+                Gson gson = new Gson();
+                String groupJson = gson.toJson(group);
+
+                return groupJson.getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        Volley.newRequestQueue(context).add(stringRequest);
     }
 
     public static void showNotification(Context context){

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class CreateGroupUserDataStorage {
     public static ArrayList<String> usernames = new ArrayList<>();
+    public static ArrayList<String> selectedUsernames = new ArrayList<>();
+
 
     public static void fillData(final Context context, final CreateGroupUserListAdapter adapter){
         usernames.clear();

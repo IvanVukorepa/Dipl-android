@@ -1,5 +1,6 @@
 package com.example.androidchatapp.create_group_screen;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.ColorSpace;
 import android.support.design.widget.FloatingActionButton;
@@ -25,25 +26,25 @@ public class CreateGroup extends AppCompatActivity {
     ListView listView;
     FloatingActionButton floatingActionButton;
 
-    ArrayList<String> selectedUsernames = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
 
         listView = (ListView) findViewById(R.id.createGroupList);
-        floatingActionButton = findViewById(R.id.fab);
+        floatingActionButton = findViewById(R.id.fabCreateGroup);
+        CreateGroupUserDataStorage.selectedUsernames.clear();
+        CreateGroupUserDataStorage.selectedUsernames.add(AuthTokenService.getPayloadData("username"));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String username = CreateGroupUserDataStorage.usernames.get(i);
-                if (selectedUsernames.contains(username)){
-                    selectedUsernames.remove(username);
+                if (CreateGroupUserDataStorage.selectedUsernames.contains(username)){
+                    CreateGroupUserDataStorage.selectedUsernames.remove(username);
                     view.setBackgroundColor(Color.WHITE);
                 } else {
-                    selectedUsernames.add(username);
+                    CreateGroupUserDataStorage.selectedUsernames.add(username);
                     view.setBackgroundColor(Color.BLUE);
                 }
             }
@@ -52,7 +53,8 @@ public class CreateGroup extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // create group
+                Intent intent = new Intent(getApplicationContext(), GroupDetails.class);
+                startActivity(intent);
             }
         });
 
