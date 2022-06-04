@@ -82,6 +82,7 @@ public class TestService extends Service {
                                     client.send(message);
                                 } else{
                                     //TODO: notify message not sent/possibly save message and send later
+                                    Toast.makeText(getApplicationContext(), "message " + message + " not sent", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 Log.e("error","message is empty");
@@ -173,6 +174,7 @@ public class TestService extends Service {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
+                        Log.e("error", response.toString());
                         String url = response.getString("url");
                         Log.e("error", "negotiate finished");
                         TestService.pubSubConnectionURL = url;
