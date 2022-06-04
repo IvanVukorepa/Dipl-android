@@ -3,6 +3,7 @@ package com.example.androidchatapp.Services;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -14,6 +15,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.androidchatapp.Models.UserGroup;
 import com.example.androidchatapp.R;
+import com.example.androidchatapp.create_group_screen.CreateGroup;
+import com.example.androidchatapp.create_group_screen.CreateGroupUserDataStorage;
 import com.example.androidchatapp.login_screen.LoginActivity;
 import com.example.androidchatapp.chat_screen.ChatActivity;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
@@ -29,6 +32,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.sql.StatementEvent;
 
@@ -111,8 +115,11 @@ public class UserService {
         Volley.newRequestQueue(context).add(registerUser);
     }
 
-    public static void getAll(final Context context, final ChatsListAdapter adapter, final String filter){
+    public static void getAll(final Context context, final BaseAdapter adapter, final String filter){
+        getAll(context, adapter, filter, false);
+    }
 
+    public static void getAll(final Context context, final BaseAdapter adapter, final String filter, final Boolean second){
         if (filter.equals("")){
             Toast.makeText(context, "Filter can't be empty", Toast.LENGTH_SHORT).show();
             return;
@@ -128,16 +135,25 @@ public class UserService {
                 Type type = new TypeToken<List<String>>(){}.getType();
                 ArrayList<String> users = gson.fromJson(response.toString(), type);
 
-                ArrayList<UserGroup> userGroups = new ArrayList<>();
-                for (String u:users) {
-                    if (u != null){
-                        String group = getGroupName(AuthTokenService.getPayloadData("username"), u);
-                        UserGroup ug = new UserGroup(AuthTokenService.getPayloadData("username"), group, u);
-                        userGroups.add(ug);
+                if (second){
+                    Log.e("usrs", "test");
+                    for (String s:users) {
+                        Log.e("usrs", s);
                     }
+                    CreateGroupUserDataStorage.usernames.clear();
+                    CreateGroupUserDataStorage.usernames.addAll(users);
+                    CreateGroupUserDataStorage.usernames.addAll(CreateGroupUserDataStorage.selectedUsernames);
+                }else{
+                    ArrayList<UserGroup> userGroups = new ArrayList<>();
+                    for (String u:users) {
+                        if (u != null){
+                            String group = getGroupName(AuthTokenService.getPayloadData("username"), u);
+                            UserGroup ug = new UserGroup(AuthTokenService.getPayloadData("username"), group, u);
+                            userGroups.add(ug);
+                        }
+                    }
+                    ChatListDataStorage.chats = userGroups;
                 }
-
-                ChatListDataStorage.chats = userGroups;
 
                 adapter.notifyDataSetChanged();
             }

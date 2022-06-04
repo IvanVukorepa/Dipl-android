@@ -10,11 +10,12 @@ import java.util.ArrayList;
 
 public class CreateGroupUserDataStorage {
     public static ArrayList<String> usernames = new ArrayList<>();
+    public static ArrayList<String> allUsernames = new ArrayList<>();
     public static ArrayList<String> selectedUsernames = new ArrayList<>();
 
 
     public static void fillData(final Context context, final CreateGroupUserListAdapter adapter){
-        usernames.clear();
+        allUsernames.clear();
         GroupsDataSource groupsDataSource = new GroupsDataSource(context);
         groupsDataSource.open();
         ArrayList<Group> groups = groupsDataSource.getAllGroupsForUser(AuthTokenService.getPayloadData("username"));
@@ -23,9 +24,11 @@ public class CreateGroupUserDataStorage {
         for (Group g: groups){
             String username = getUsername(g.getGroupName());
             if (!username.equals("")){
-                usernames.add(username);
+                allUsernames.add(username);
             }
         }
+        usernames.clear();
+        usernames.addAll(allUsernames);
 
         adapter.notifyDataSetChanged();
     }

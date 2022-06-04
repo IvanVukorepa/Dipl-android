@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.androidchatapp.Models.NewGroup;
 import com.example.androidchatapp.R;
+import com.example.androidchatapp.Services.AuthTokenService;
 import com.example.androidchatapp.Services.ChatService;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
 import com.example.androidchatapp.main_screen.ChatsListAdapter;
@@ -40,6 +41,7 @@ public class GroupDetails extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CreateGroupUserDataStorage.selectedUsernames.add(AuthTokenService.getPayloadData("username"));
                 NewGroup newGroup = new NewGroup(CreateGroupUserDataStorage.selectedUsernames, groupName.getText().toString());
                 ChatService.createGroupChat(getApplicationContext(), newGroup);
 
