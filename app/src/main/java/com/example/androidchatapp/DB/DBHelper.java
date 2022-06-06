@@ -14,7 +14,10 @@ public class DBHelper extends SQLiteOpenHelper {
             + "user TEXT NOT NULL,"
             + "chatName TEXT NOT NULL,"
             + "username TEXT NOT NULL,"
-            + "messageContent TEXT NOT NULL)";
+            + "messageContent TEXT NOT NULL,"
+            + "imageURI TEXT NOT NULL,"
+            + "datetime TEXT NOT NULL,"
+            + "guid TEXT NOT NULL)";
 
     private static final String GROUPS_TABLE="create table Groups"
             + "(_id INTEGER PRIMARY KEY AUTOINCREMENT,"

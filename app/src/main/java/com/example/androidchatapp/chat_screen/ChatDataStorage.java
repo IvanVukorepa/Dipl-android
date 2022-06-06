@@ -27,7 +27,7 @@ public class ChatDataStorage {
 
         for (MessageDatabse m: messagesDB) {
             Log.e("all messages", m.getChatName() + " " + m.getUsername() + " " + m.getMessageContent());
-            Message message = new Message(m.getUsername(), m.getMessageContent());
+            Message message = new Message(m.getUsername(), m.getMessageContent(), m.getImageURI(), m.getDatetime(), m.getGuid());
             messages.add(message);
         }
         adapter.notifyDataSetChanged();

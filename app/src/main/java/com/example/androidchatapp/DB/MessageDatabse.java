@@ -5,6 +5,9 @@ public class MessageDatabse {
     private String chatName;
     private String username;
     private String messageContent;
+    private String imageURI;
+    private String datetime;
+    private String guid;
 
     public int getId(){
         return id;
@@ -22,6 +25,18 @@ public class MessageDatabse {
         return messageContent;
     }
 
+    public String getImageURI() {
+        return imageURI;
+    }
+
+    public String getDatetime() {
+        return datetime;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
     public void setId(int messageId){
         id = messageId;
     }
@@ -36,5 +51,17 @@ public class MessageDatabse {
 
     public void setMessageContent(String message){
         messageContent = message;
+    }
+
+    public void setImageURI(String imageURI) {
+        this.imageURI = imageURI;
+    }
+
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 }
