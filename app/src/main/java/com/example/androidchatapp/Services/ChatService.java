@@ -3,8 +3,10 @@ package com.example.androidchatapp.Services;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
@@ -44,6 +46,8 @@ public class ChatService {
     public static UserGroup chat;
     public static boolean checkIfNewChat = false;
     public static int notificationId = 0;
+    public static byte[] byteArr = null;
+    public static String imageString = "";
 
     public static void rejoinGroups(final Context context, final String username){
         final String rejoinGroupsURL = context.getApplicationContext().getString(R.string.ChatServiceBaseURL) + context.getApplicationContext().getString(R.string.rejoin) + "?username=" + username;
@@ -147,6 +151,38 @@ public class ChatService {
         };
 
         Volley.newRequestQueue(context).add(stringRequest);
+    }
+
+    public static void sendImage(Context context, String group, String message){
+        Log.e("info", "send image");
+        JSONObject test = new JSONObject();
+        JSONObject data = new JSONObject();
+        try {
+            test.put("type", "event");
+            test.put("event", "testevent");
+            //test.put("ackId", 1);
+            //change data to json and send group and message
+            test.put("dataType", "json");
+            if(byteArr != null){
+                data.put("image",  Base64.encodeToString(byteArr, Base64.NO_WRAP));
+            }
+            data.put("message",  message);
+            data.put("group", group);
+            test.put("data", data);
+        } catch (JSONException e){
+            Log.e("info", "JSON exception");
+        }
+
+        byteArr = null;
+        Intent serviceIntent = new Intent(context, TestService.class);
+        //Bundle bundle = new Bundle();
+        //bundle.putString("messageBundle", test.toString());
+        //serviceIntent.putExtra("message", test.toString());
+        //serviceIntent.putExtras(bundle);
+        serviceIntent.putExtra("message", "");
+        imageString = test.toString();
+        Log.e("service", "intent start service WebPubSubConService");
+        context.startService(serviceIntent);
     }
 
     public static void showNotification(Context context){

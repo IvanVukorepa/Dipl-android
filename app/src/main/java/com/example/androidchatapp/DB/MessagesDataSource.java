@@ -29,13 +29,16 @@ public class MessagesDataSource {
         database.close();
     }
 
-    public void addMessageToDB(String user, String username, String group, String content){
+    public void addMessageToDB(String user, String username, String group, String content, String imageURI, String datetime, String guid){
         ContentValues values = new ContentValues();
 
         values.put("user", user);
         values.put("chatName", group);
         values.put("username", username);
         values.put("messageContent", content);
+        values.put("imageURI", imageURI);
+        values.put("datetime", datetime);
+        values.put("guid", guid);
         Log.e("addmessage", "adding " + content + " to db");
         database.insert("Messages", null, values);
     }
@@ -53,6 +56,9 @@ public class MessagesDataSource {
             message.setChatName(cursor.getString(2));
             message.setUsername(cursor.getString(3));
             message.setMessageContent(cursor.getString(4));
+            message.setImageURI(cursor.getString(5));
+            message.setDatetime(cursor.getString(6));
+            message.setGuid(cursor.getString(7));
             messages.add(message);
             cursor.moveToNext();
         }

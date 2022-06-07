@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.example.androidchatapp.R;
 import com.example.androidchatapp.Services.AuthTokenService;
+import com.example.androidchatapp.Services.ChatService;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,6 +52,7 @@ public class chatAdapter extends BaseAdapter {
 
         final TextView chatMessage = (TextView) view.findViewById(R.id.messageContentTV);
         final TextView chatSender = (TextView) view.findViewById(R.id.messageSenderTV);
+        final ImageView imageView = view.findViewById(R.id.message_image_view);
         final String message = ChatDataStorage.messages.get(i).message;
         final String sender = ChatDataStorage.messages.get(i).user;
 
@@ -66,6 +69,14 @@ public class chatAdapter extends BaseAdapter {
 
         chatMessage.setText(message);
         chatSender.setText(sender);
+        if(!ChatDataStorage.messages.get(i).imageURI.equals("")){
+            Log.e("chat view", "loading image from " + ChatDataStorage.messages.get(i).imageURI);
+            Picasso.get().load(ChatDataStorage.messages.get(i).imageURI).into(imageView);
+            imageView.setVisibility(View.VISIBLE);
+        } else{
+            imageView.setVisibility(View.GONE);
+        }
 
-        return view;    }
+        return view;
+    }
 }

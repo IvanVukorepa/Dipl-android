@@ -86,6 +86,13 @@ public class TestService extends Service {
                                 }
                             } else {
                                 Log.e("error","message is empty");
+                                if(client != null && client.isOpen()){
+                                    //Log.e("testserviceImage", ChatService.imageString.length() + "");
+                                    client.send(ChatService.imageString);
+                                } else{
+                                    //TODO: notify message not sent/possibly save message and send later
+                                    //Toast.makeText(getApplicationContext(), "message not sent", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                     }
@@ -256,7 +263,7 @@ public class TestService extends Service {
 
         MessagesDataSource msgDataSource = new MessagesDataSource(context);
         msgDataSource.open();
-        msgDataSource.addMessageToDB(getUsername(context), data.data.user, data.group, data.data.message);
+        msgDataSource.addMessageToDB(getUsername(context), data.data.user, data.group, data.data.message, data.data.imageURI, data.data.time, data.data.guid);
         msgDataSource.close();
 
         GroupsDataSource groupsDataSource = new GroupsDataSource(context);

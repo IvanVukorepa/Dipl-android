@@ -12,7 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:id="@+id/message_image_view"
+        android:contentDescription="content"/>
     <TextView
         android:id="@+id/messageContentTV"
         android:layout_width="match_parent"
