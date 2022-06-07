@@ -25,6 +25,7 @@ public class ChatDataStorage {
         ArrayList<MessageDatabse> messagesDB = msgDataSource.getAllMessagesForChat(AuthTokenService.getPayloadData("username"), chatName);
         msgDataSource.close();
 
+        messages.clear();
         for (MessageDatabse m: messagesDB) {
             Log.e("all messages", m.getChatName() + " " + m.getUsername() + " " + m.getMessageContent());
             Message message = new Message(m.getUsername(), m.getMessageContent(), m.getImageURI(), m.getDatetime(), m.getGuid());
@@ -34,10 +35,6 @@ public class ChatDataStorage {
     }
 
     public static void addMessage(Context context, final PubSubData data, chatAdapter adapter){
-
-        Log.e("a", ChatService.chat.toString());
-        Log.e("a", data.group);
-
         if (ChatService.chat.group.equals(data.group)){
             messages.add(data.data);
             adapter.notifyDataSetChanged();

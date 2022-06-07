@@ -71,7 +71,9 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.e("info", "send message clicked");
-                JSONObject test = new JSONObject();
+
+                ChatService.sendImage(getApplicationContext(), ChatService.chat.group, newMessageET.getText().toString());
+                /*JSONObject test = new JSONObject();
                 JSONObject data = new JSONObject();
                 try {
                     test.put("type", "event");
@@ -90,7 +92,7 @@ public class ChatActivity extends AppCompatActivity {
                 Intent serviceIntent = new Intent(getApplicationContext(), TestService.class);
                 serviceIntent.putExtra("message", test.toString());
                 Log.e("service", "intent start service WebPubSubConService");
-                startService(serviceIntent);
+                startService(serviceIntent);*/
 
             }
         });
@@ -163,7 +165,7 @@ public class ChatActivity extends AppCompatActivity {
 
                     ChatService.byteArr = byteArrayOutputStream.toByteArray();
                     inputStream.read(ChatService.byteArr);
-                    ChatService.sendImage(getApplicationContext(), ChatService.chat.group);
+
                     /*InputStream inputStream = getApplicationContext().getContentResolver().openInputStream(data.getData());
                     Bitmap bmp = BitmapFactory.decodeStream(inputStream);
                     Log.e("imagesize", "size is " + bmp.getByteCount());

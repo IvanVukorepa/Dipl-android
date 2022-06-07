@@ -46,8 +46,8 @@ public class ChatService {
     public static UserGroup chat;
     public static boolean checkIfNewChat = false;
     public static int notificationId = 0;
-    public static byte[] byteArr;
-    public static String imageString;
+    public static byte[] byteArr = null;
+    public static String imageString = "";
 
     public static void rejoinGroups(final Context context, final String username){
         final String rejoinGroupsURL = context.getApplicationContext().getString(R.string.ChatServiceBaseURL) + context.getApplicationContext().getString(R.string.rejoin) + "?username=" + username;
@@ -153,7 +153,7 @@ public class ChatService {
         Volley.newRequestQueue(context).add(stringRequest);
     }
 
-    public static void sendImage(Context context, String group){
+    public static void sendImage(Context context, String group, String message){
         Log.e("info", "send image");
         JSONObject test = new JSONObject();
         JSONObject data = new JSONObject();
@@ -163,14 +163,17 @@ public class ChatService {
             //test.put("ackId", 1);
             //change data to json and send group and message
             test.put("dataType", "json");
-            data.put("image",  Base64.encodeToString(byteArr, Base64.NO_WRAP));
-            data.put("message",  "test message");
+            if(byteArr != null){
+                data.put("image",  Base64.encodeToString(byteArr, Base64.NO_WRAP));
+            }
+            data.put("message",  message);
             data.put("group", group);
             test.put("data", data);
         } catch (JSONException e){
             Log.e("info", "JSON exception");
         }
 
+        byteArr = null;
         Intent serviceIntent = new Intent(context, TestService.class);
         //Bundle bundle = new Bundle();
         //bundle.putString("messageBundle", test.toString());
