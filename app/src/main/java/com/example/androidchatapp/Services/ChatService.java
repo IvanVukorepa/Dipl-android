@@ -24,6 +24,7 @@ import com.example.androidchatapp.R;
 import com.example.androidchatapp.chat_screen.ChatDataStorage;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
 import com.example.androidchatapp.main_screen.ChatsListAdapter;
+import com.example.androidchatapp.main_screen.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.internal.$Gson$Preconditions;
@@ -47,7 +48,7 @@ public class ChatService {
     public static boolean checkIfNewChat = false;
     public static int notificationId = 0;
     public static byte[] byteArr = null;
-    public static String imageString = "";
+    public static String messageToSend = "";
 
     public static void rejoinGroups(final Context context, final String username){
         final String rejoinGroupsURL = context.getApplicationContext().getString(R.string.ChatServiceBaseURL) + context.getApplicationContext().getString(R.string.rejoin) + "?username=" + username;
@@ -180,7 +181,7 @@ public class ChatService {
         //serviceIntent.putExtra("message", test.toString());
         //serviceIntent.putExtras(bundle);
         serviceIntent.putExtra("message", "");
-        imageString = test.toString();
+        messageToSend = test.toString();
         Log.e("service", "intent start service WebPubSubConService");
         context.startService(serviceIntent);
     }
@@ -197,5 +198,31 @@ public class ChatService {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId++, builder.build());
+    }
+
+    public static void leaveGroup(final Context context) {
+        Log.e("info", "leave group");
+        JSONObject test = new JSONObject();
+        try {
+            test.put("type", "event");
+            test.put("event", "leaveGroup");
+            //test.put("ackId", 1);
+            //change data to json and send group and message
+            test.put("dataType", "text");
+            test.put("data", ChatService.chat.group);
+        } catch (JSONException e){
+            Log.e("info", "JSON exception");
+        }
+
+        byteArr = null;
+        Intent serviceIntent = new Intent(context, TestService.class);
+        //Bundle bundle = new Bundle();
+        //bundle.putString("messageBundle", test.toString());
+        //serviceIntent.putExtra("message", test.toString());
+        //serviceIntent.putExtras(bundle);
+        serviceIntent.putExtra("message", "");
+        messageToSend = test.toString();
+        Log.e("service", "intent start service WebPubSubConService");
+        context.startService(serviceIntent);
     }
 }
