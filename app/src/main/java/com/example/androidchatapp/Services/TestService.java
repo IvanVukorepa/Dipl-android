@@ -143,7 +143,7 @@ public class TestService extends Service {
                         @Override
                         public void onOpen(ServerHandshake handshakedata) {
                             Log.e("faaf", "connection opened");
-                            ChatService.rejoinGroups(getApplicationContext(), username);
+                            ChatService.rejoinGroups(getApplicationContext(), username, getToken(getApplicationContext()));
                         }
 
                         @Override
@@ -283,7 +283,7 @@ public class TestService extends Service {
                 if (isNetworkAvailable(context)){
                     Log.e("network", "network available");
                     final String username = getUsername(getApplicationContext());
-                    getUnreadMessages(context, username);
+                    getUnreadMessages(context, username, getToken(getApplicationContext()));
                     createWebSocket();
                 } else {
                   Log.e("network", "network not available");
@@ -306,7 +306,7 @@ public class TestService extends Service {
         }
     }
 
-    private void getUnreadMessages(final Context context, final String username){
+    private void getUnreadMessages(final Context context, final String username, final String authToken){
         final String url = context.getApplicationContext().getString(R.string.ChatServiceBaseURL) + context.getApplicationContext().getString(R.string.getAllUnread) + "?username=" + username;
         JsonArrayRequest getGroups = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -328,8 +328,10 @@ public class TestService extends Service {
                         boolean found = false;
 
                         for (Message m:messages) {
-                            if(m.guid.equals(guid))
+                            if(m.guid.equals(guid)) {
                                 found = true;
+                                break;
+                            }
                         }
 
                         for (Message m:messages) {
@@ -353,7 +355,14 @@ public class TestService extends Service {
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, "Error retrieving data from server", Toast.LENGTH_SHORT).show();
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> authHeader = new HashMap<>();
+                authHeader.put("Authorization", "Bearer " + authToken);
+                return authHeader;
+            }
+        };
 
         Volley.newRequestQueue(context).add(getGroups);
     }

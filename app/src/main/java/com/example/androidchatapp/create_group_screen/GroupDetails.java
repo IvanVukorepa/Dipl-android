@@ -43,7 +43,7 @@ public class GroupDetails extends AppCompatActivity {
             public void onClick(View view) {
                 CreateGroupUserDataStorage.selectedUsernames.add(AuthTokenService.getPayloadData("username"));
                 NewGroup newGroup = new NewGroup(CreateGroupUserDataStorage.selectedUsernames, groupName.getText().toString());
-                ChatService.createGroupChat(getApplicationContext(), newGroup);
+                ChatService.createGroupChat(getApplicationContext(), newGroup, AuthTokenService.getToken());
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);

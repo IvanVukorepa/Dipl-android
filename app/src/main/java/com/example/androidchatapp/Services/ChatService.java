@@ -25,6 +25,7 @@ import com.example.androidchatapp.chat_screen.ChatDataStorage;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
 import com.example.androidchatapp.main_screen.ChatsListAdapter;
 import com.example.androidchatapp.main_screen.MainActivity;
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.internal.$Gson$Preconditions;
@@ -38,8 +39,10 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -51,7 +54,7 @@ public class ChatService {
     public static byte[] byteArr = null;
     public static String messageToSend = "";
 
-    public static void rejoinGroups(final Context context, final String username){
+    public static void rejoinGroups(final Context context, final String username, final String authToken){
         final String rejoinGroupsURL = context.getApplicationContext().getString(R.string.ChatServiceBaseURL) + context.getApplicationContext().getString(R.string.rejoin) + "?username=" + username;
         StringRequest request = new StringRequest(StringRequest.Method.POST, rejoinGroupsURL, new Response.Listener<String>() {
             @Override
@@ -63,12 +66,19 @@ public class ChatService {
             public void onErrorResponse(VolleyError error) {
                 Log.e("error", "failed to rejoin groups due to " + error.toString());
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> authHeader = new HashMap<>();
+                authHeader.put("Authorization", "Bearer " + authToken);
+                return authHeader;
+            }
+        };
 
         Volley.newRequestQueue(context).add(request);
     }
 
-    public static void getAllGroupsForUser(final Context context, final String username, final ChatsListAdapter adapter, final String groupToRemove){
+    public static void getAllGroupsForUser(final Context context, final String username, final ChatsListAdapter adapter, final String groupToRemove, final String authToken){
         final String url = context.getApplicationContext().getString(R.string.ChatServiceBaseURL) + context.getApplicationContext().getString(R.string.getAllGroupsUser) + "?username=" + username;
         JsonArrayRequest getGroups = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -98,7 +108,14 @@ public class ChatService {
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, "Error retrieving data from server", Toast.LENGTH_SHORT).show();
             }
-        });
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> authHeader = new HashMap<>();
+                authHeader.put("Authorization", "Bearer " + authToken);
+                return authHeader;
+            }
+        };
 
         Volley.newRequestQueue(context).add(getGroups);
     }
@@ -130,7 +147,7 @@ public class ChatService {
         }
     }
 
-    public static void createGroupChat(final Context context, final NewGroup group){
+    public static void createGroupChat(final Context context, final NewGroup group, final String authToken){
 
         String url = context.getString(R.string.ChatServiceBaseURL) + context.getString(R.string.createGroup);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -144,6 +161,13 @@ public class ChatService {
                 Toast.makeText(context, "Failed to crate group, error - " + error.toString(), Toast.LENGTH_SHORT).show();
             }
         }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+            Map<String, String> authHeader = new HashMap<>();
+            authHeader.put("Authorization", "Bearer " + authToken);
+            return authHeader;
+            }
+
             @Override
             public byte[] getBody() {
                 Gson gson = new Gson();

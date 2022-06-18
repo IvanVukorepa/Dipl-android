@@ -24,7 +24,7 @@ public class ChatListDataStorage {
     }
 
     public static void fillData(final Context context, final ChatsListAdapter adapter, String groupToRemove){
-        ChatService.getAllGroupsForUser(context, AuthTokenService.getPayloadData("username"), adapter, groupToRemove);
+        ChatService.getAllGroupsForUser(context, AuthTokenService.getPayloadData("username"), adapter, groupToRemove, AuthTokenService.getToken());
     }
 
     public static void sortGroups(Context context, final ChatsListAdapter adapter){
