@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         listView.setAdapter(adapter);
-        ChatListDataStorage.fillData(getApplicationContext(), adapter);
+        String groupToRemove = getIntent().getStringExtra("removeGroup");
+        ChatListDataStorage.fillData(getApplicationContext(), adapter, groupToRemove);
     }
 
     @Override

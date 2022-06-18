@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -67,7 +68,7 @@ public class ChatService {
         Volley.newRequestQueue(context).add(request);
     }
 
-    public static void getAllGroupsForUser(final Context context, final String username, final ChatsListAdapter adapter){
+    public static void getAllGroupsForUser(final Context context, final String username, final ChatsListAdapter adapter, final String groupToRemove){
         final String url = context.getApplicationContext().getString(R.string.ChatServiceBaseURL) + context.getApplicationContext().getString(R.string.getAllGroupsUser) + "?username=" + username;
         JsonArrayRequest getGroups = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -77,6 +78,12 @@ public class ChatService {
                 Gson gson = new Gson();
                 Type type = new TypeToken<List<UserGroup>>(){}.getType();
                 ChatListDataStorage.allChats = gson.fromJson(response.toString(), type);
+
+                for (Iterator<UserGroup> iterator = ChatListDataStorage.allChats.iterator(); iterator.hasNext();){
+                    if (iterator.next().chatName.equals(groupToRemove)){
+                        iterator.remove();
+                    }
+                }
                 ChatListDataStorage.chats = ChatListDataStorage.allChats;
                 for (UserGroup ug:ChatListDataStorage.allChats) {
                     //Log.e("getAll", ug.chatName);

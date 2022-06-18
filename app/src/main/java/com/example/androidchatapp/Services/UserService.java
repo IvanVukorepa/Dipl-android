@@ -39,7 +39,7 @@ import javax.sql.StatementEvent;
 public class UserService {
 
     public static void login(final Context context, final String username, final String password){
-        String loginURL = context.getString(R.string.UsersServiceBaseURL) + context.getString(R.string.Login);
+        final String loginURL = context.getString(R.string.UsersServiceBaseURL) + context.getString(R.string.Login);
         StringRequest loginRequest = new StringRequest(StringRequest.Method.POST, loginURL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -59,6 +59,7 @@ public class UserService {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context.getApplicationContext(),"username or password is wrong", Toast.LENGTH_SHORT).show();
+                Log.e("login error", error.toString());
             }
         }){
             @Override

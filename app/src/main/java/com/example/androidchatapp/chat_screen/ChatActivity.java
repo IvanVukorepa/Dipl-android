@@ -29,6 +29,7 @@ import com.example.androidchatapp.Services.PubSubData;
 import com.example.androidchatapp.Services.TestService;
 import com.example.androidchatapp.create_group_screen.CreateGroup;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
+import com.example.androidchatapp.main_screen.MainActivity;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.internal.bind.util.ISO8601Utils;
@@ -214,6 +215,9 @@ public class ChatActivity extends AppCompatActivity {
                 return true;
             case R.id.leaveGroup:
                 ChatService.leaveGroup(getApplicationContext());
+                Intent intent_main_screen = new Intent(getApplicationContext(), MainActivity.class);
+                intent_main_screen.putExtra("removeGroup", ChatService.chat.chatName);
+                startActivity(intent_main_screen);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
