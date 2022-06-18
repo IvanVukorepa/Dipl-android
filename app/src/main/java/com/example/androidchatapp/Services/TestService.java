@@ -74,24 +74,27 @@ public class TestService extends Service {
                     @Override
                     public void run() {
                         if (intent != null) {
-                            String message = intent.getExtras().get("message").toString();
                             Log.e("service", "service send event" + this.toString());
-                            if (!message.isEmpty()){
-                                //EventBus.getDefault().post(message);
-                                if(client.isOpen()){
-                                    client.send(message);
-                                } else{
-                                    //TODO: notify message not sent/possibly save message and send later
-                                    Toast.makeText(getApplicationContext(), "message " + message + " not sent", Toast.LENGTH_SHORT).show();
+
+                            if(client != null && client.isOpen()){
+                                if(!ChatService.messageToSend.equals("")){
+                                    client.send(ChatService.messageToSend);
+                                    ChatService.messageToSend = "";
+                                } else {
+                                    try {
+                                        Toast.makeText(getApplicationContext(), "message to send is empty", Toast.LENGTH_SHORT).show();
+                                    } catch (Exception ex) {
+
+                                    }
                                 }
-                            } else {
-                                Log.e("error","message is empty");
-                                if(client != null && client.isOpen()){
-                                    //Log.e("testserviceImage", ChatService.imageString.length() + "");
-                                    client.send(ChatService.imageString);
-                                } else{
-                                    //TODO: notify message not sent/possibly save message and send later
-                                    //Toast.makeText(getApplicationContext(), "message not sent", Toast.LENGTH_SHORT).show();
+
+                            } else{
+                                //TODO: notify message not sent/possibly save message and send later
+                                Log.e("messageError", "client not open");
+                                try {
+                                    Toast.makeText(getApplicationContext(), "message not sent", Toast.LENGTH_SHORT).show();
+                                } catch (Exception ex){
+
                                 }
                             }
                         }
@@ -127,7 +130,7 @@ public class TestService extends Service {
     public void createWebSocket(){
         final String authToken = getToken(getApplicationContext());
         final String username = getUsername(getApplicationContext());
-        Log.e("test", authToken + " " + username);
+        Log.e("test createWebSocket", authToken + " " + username);
         getConnection(getApplicationContext(), username, authToken, new ServerCalback() {
             @Override
             public void onSucess(String url) {
@@ -173,8 +176,8 @@ public class TestService extends Service {
         });
     }
 
-    public void getConnection(final Context context, final String username, final String authToken, final ServerCalback callback)
-    {
+    public void getConnection(final Context context, final String username, final String authToken, final ServerCalback callback) {
+        Log.e("getconnection", "get connection called for user " + username);
         if (TestService.pubSubConnectionURL.isEmpty()){
             final String negotiateURL = context.getApplicationContext().getString(R.string.ChatServiceBaseURL) + context.getApplicationContext().getString(R.string.negotiate) + "?userId=" + username;
             JsonObjectRequest request = new JsonObjectRequest(negotiateURL, null, new Response.Listener<JSONObject>() {
@@ -271,6 +274,7 @@ public class TestService extends Service {
         groupsDataSource.updateGroupData(getUsername(context), data.group, data.data.time, data.data.guid);
         groupsDataSource.close();
     }
+
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -368,5 +372,11 @@ public class TestService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         Log.e("testservice", "ontaskremoved");
         super.onTaskRemoved(rootIntent);
+    }
+
+    public static void closeClient(){
+        client.close();
+        pubSubConnectionURL = "";
+
     }
 }

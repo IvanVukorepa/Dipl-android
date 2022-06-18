@@ -4,15 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.androidchatapp.Models.UserGroup;
@@ -23,7 +27,9 @@ import com.example.androidchatapp.Services.ImageHandler;
 import com.example.androidchatapp.Services.Message;
 import com.example.androidchatapp.Services.PubSubData;
 import com.example.androidchatapp.Services.TestService;
+import com.example.androidchatapp.create_group_screen.CreateGroup;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
+import com.example.androidchatapp.main_screen.MainActivity;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.internal.bind.util.ISO8601Utils;
@@ -66,6 +72,7 @@ public class ChatActivity extends AppCompatActivity {
         int userGroupPosition = intent.getIntExtra("userGroupPosition", -1);
 
         ChatService.chat = ChatListDataStorage.chats.get(userGroupPosition);
+        setTitle(ChatService.chat.chatName);
 
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +194,33 @@ public class ChatActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "exception occured + " + ex.toString(), Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main_chat, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout:
+                return true;
+            case R.id.createGroup:
+                Intent intent = new Intent(getApplicationContext(), CreateGroup.class);
+                startActivity(intent);
+                return true;
+            case R.id.leaveGroup:
+                ChatService.leaveGroup(getApplicationContext());
+                Intent intent_main_screen = new Intent(getApplicationContext(), MainActivity.class);
+                intent_main_screen.putExtra("removeGroup", ChatService.chat.chatName);
+                startActivity(intent_main_screen);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

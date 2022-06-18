@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.androidchatapp.main_screen.MainActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/leaveGroup"
+        android:title="Leave Chat"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/createGroup"
+        android:title="Create Group Chat"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/logout"
+        android:title="logout"
+        app:showAsAction="never"/>
+</menu>

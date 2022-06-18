@@ -17,14 +17,15 @@
     <string name="addUser">api/AddUser</string>
     <string name="Login">api/Login</string>
 
-    <string name="ChatServiceBaseURL">https://testfunctionappchat.azurewebsites.net/</string>
-    <!--string name="ChatServiceBaseURL">https://68ae-46-188-160-220.eu.ngrok.io/</string-->
+    <!--string name="ChatServiceBaseURL">https://testfunctionappchat.azurewebsites.net/</string-->
+    <string name="ChatServiceBaseURL">https://9536-86-32-45-43.eu.ngrok.io/</string>
 
     <string name="negotiate">api/negotiate</string>
     <string name="rejoin">api/rejoinGroups</string>
     <string name="getAllGroupsUser">api/getAllGroupsUser</string>
     <string name="getAllUnread">api/GetAllUnread</string>
     <string name="createGroup">api/createGroup</string>
+    <string name="leaveGroup">api/leaveGroup</string>
 
     <string name="getAllUsers">api/getAllFiltered</string>
 

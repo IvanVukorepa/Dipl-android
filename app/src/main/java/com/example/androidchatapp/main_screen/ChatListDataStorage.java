@@ -20,7 +20,11 @@ public class ChatListDataStorage {
     public static ArrayList<UserGroup> allChats = new ArrayList<>();
 
     public static void fillData(final Context context, final ChatsListAdapter adapter){
-        ChatService.getAllGroupsForUser(context, AuthTokenService.getPayloadData("username"), adapter);
+        fillData(context, adapter, "");
+    }
+
+    public static void fillData(final Context context, final ChatsListAdapter adapter, String groupToRemove){
+        ChatService.getAllGroupsForUser(context, AuthTokenService.getPayloadData("username"), adapter, groupToRemove);
     }
 
     public static void sortGroups(Context context, final ChatsListAdapter adapter){
