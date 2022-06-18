@@ -16,6 +16,10 @@
         <activity android:name=".create_group_screen.CreateGroup" />
         <activity android:name=".main_screen.MainActivity">
             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
@@ -27,12 +31,6 @@
         <activity android:name=".registration_screen.RegistrationActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".login_screen.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service

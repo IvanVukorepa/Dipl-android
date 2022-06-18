@@ -168,6 +168,22 @@ public class UserService {
         Volley.newRequestQueue(context).add(getGroups);
     }
 
+    public static void logout (Context context){
+        MyPreferences preferences = new MyPreferences(context);
+
+        preferences.setString("AuthToken", "");
+        preferences.setString("Username", "");
+
+
+        TestService.closeClient();
+        Intent intentService = new Intent(context, TestService.class);
+        context.stopService(intentService);
+
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
     private static String getGroupName(String username1, String username2){
         String name = "";
         if (username1.compareTo(username2) < 0){

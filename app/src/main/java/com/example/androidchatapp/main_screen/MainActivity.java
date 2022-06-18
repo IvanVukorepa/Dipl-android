@@ -19,12 +19,14 @@ import com.example.androidchatapp.Models.UserGroup;
 import com.example.androidchatapp.R;
 import com.example.androidchatapp.Services.AuthTokenService;
 import com.example.androidchatapp.Services.ChatService;
+import com.example.androidchatapp.Services.MyPreferences;
 import com.example.androidchatapp.Services.PubSubData;
 import com.example.androidchatapp.Services.TestService;
 import com.example.androidchatapp.Services.UserService;
 import com.example.androidchatapp.chat_screen.ChatActivity;
 import com.example.androidchatapp.chat_screen.ChatDataStorage;
 import com.example.androidchatapp.create_group_screen.CreateGroup;
+import com.example.androidchatapp.login_screen.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.mainScreenList);
         adapter = new ChatsListAdapter(getApplicationContext());
+
+        startLoginIfNotLoggedIn();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -67,6 +71,22 @@ public class MainActivity extends AppCompatActivity {
         serviceIntent.putExtra("message", "");
         Log.e("service", "intent start service WebPubSubConService");
         startService(serviceIntent);
+    }
+
+    private void startLoginIfNotLoggedIn() {
+        MyPreferences preferences = new MyPreferences(getApplicationContext());
+
+        String username = preferences.getString("Username");
+        String token = preferences.getString("AuthToken");
+
+        if (username.isEmpty() || token.isEmpty()){
+            Intent intent;
+            intent = new Intent(getApplicationContext(), LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
+        } else {
+            AuthTokenService.decodeToken(token, getApplicationContext());
+        }
     }
 
     @Override
@@ -119,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.logout:
+                UserService.logout(getApplicationContext());
                 return true;
             case R.id.createGroup:
                 Intent intent = new Intent(getApplicationContext(), CreateGroup.class);
