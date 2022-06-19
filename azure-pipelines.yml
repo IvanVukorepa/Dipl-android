@@ -40,4 +40,13 @@ steps:
     apksignerKeystoreAlias: 'alias_name'
     apksignerKeyPassword: '$(password)'
 
-  
+- task: AppCenterDistribute@3
+  inputs:
+    serverEndpoint: 'diplomski appcenter connection'
+    appSlug: 'ivukor00-fesb.hr/Dipl-android'
+    appFile: '$(build.artifactstagingdirectory)/**/*.ipa'
+    buildVersion: '1'
+    symbolsOption: 'Android'
+    releaseNotesOption: 'input'
+    releaseNotesInput: 'release notes'
+    destinationType: 'groups'
