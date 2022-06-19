@@ -121,7 +121,6 @@ public class ChatService {
     }
 
     public static void createChatIfNotExists(final Context context, String username1, String username2){
-
         if (ChatService.checkIfNewChat && !ChatListDataStorage.allChats.contains(ChatService.chat)){
             JSONObject test = new JSONObject();
             JSONObject data = new JSONObject();
@@ -139,7 +138,7 @@ public class ChatService {
             }
 
             Intent serviceIntent = new Intent(context, TestService.class);
-            serviceIntent.putExtra("message", test.toString());
+            ChatService.messageToSend = test.toString();
             Log.e("service", "intent start service WebPubSubConService");
             context.startService(serviceIntent);
 
@@ -207,11 +206,6 @@ public class ChatService {
 
         byteArr = null;
         Intent serviceIntent = new Intent(context, TestService.class);
-        //Bundle bundle = new Bundle();
-        //bundle.putString("messageBundle", test.toString());
-        //serviceIntent.putExtra("message", test.toString());
-        //serviceIntent.putExtras(bundle);
-        serviceIntent.putExtra("message", "");
         messageToSend = test.toString();
         Log.e("service", "intent start service WebPubSubConService");
         context.startService(serviceIntent);
@@ -247,11 +241,6 @@ public class ChatService {
 
         byteArr = null;
         Intent serviceIntent = new Intent(context, TestService.class);
-        //Bundle bundle = new Bundle();
-        //bundle.putString("messageBundle", test.toString());
-        //serviceIntent.putExtra("message", test.toString());
-        //serviceIntent.putExtras(bundle);
-        serviceIntent.putExtra("message", "");
         messageToSend = test.toString();
         Log.e("service", "intent start service WebPubSubConService");
         context.startService(serviceIntent);
