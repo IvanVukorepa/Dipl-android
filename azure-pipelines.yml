@@ -32,4 +32,12 @@ steps:
     artifactType: 'container'
   displayName: Publish artifacts
 
+- task: AndroidSigning@3
+  inputs:
+    apkFiles: '**/*.apk'
+    apksignerKeystoreFile: 'my-release-key.keystore'
+    apksignerKeystorePassword: '$(password)'
+    apksignerKeystoreAlias: 'pair'
+    apksignerKeyPassword: '$(password)'
+
   
