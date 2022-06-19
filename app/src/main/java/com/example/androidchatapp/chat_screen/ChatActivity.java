@@ -50,7 +50,7 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
 
-    Button testBtn, joinBtn, imageBtn;
+    Button testBtn, imageBtn;
     EditText newMessageET;
     ListView chatMessagesLV;
     chatAdapter adapter;
@@ -60,7 +60,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         testBtn = (Button) findViewById(R.id.button);
-        joinBtn = (Button) findViewById(R.id.button2);
         imageBtn = findViewById(R.id.imagebtn);
         newMessageET = (EditText) findViewById(R.id.editTextNewMessage);
         chatMessagesLV = (ListView) findViewById(R.id.chatMessagesList);
@@ -77,30 +76,8 @@ public class ChatActivity extends AppCompatActivity {
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("info", "send message clicked");
-
-                ChatService.sendImage(getApplicationContext(), ChatService.chat.group, newMessageET.getText().toString());
-                /*JSONObject test = new JSONObject();
-                JSONObject data = new JSONObject();
-                try {
-                    test.put("type", "event");
-                    test.put("event", "testevent");
-                    //test.put("ackId", 1);
-                    //change data to json and send group and message
-                    test.put("dataType", "json");
-                    data.put("message",  newMessageET.getText().toString());
-                    data.put("group", ChatService.chat.group);
-                    //test.put("data", "[" + ChatService.chat.group + "]" + newMessageET.getText().toString());
-                    test.put("data", data);
-                } catch (JSONException e){
-                    Log.e("info", "JSON exception");
-                }
-
-                Intent serviceIntent = new Intent(getApplicationContext(), TestService.class);
-                serviceIntent.putExtra("message", test.toString());
-                Log.e("service", "intent start service WebPubSubConService");
-                startService(serviceIntent);*/
-
+                ChatService.sendMessage(getApplicationContext(), ChatService.chat.group, newMessageET.getText().toString());
+                newMessageET.setText("");
             }
         });
 
@@ -111,27 +88,6 @@ public class ChatActivity extends AppCompatActivity {
                 intentImageSelect.setType("image/*");
                 // replace request code
                 startActivityForResult(intentImageSelect, 1);
-            }
-        });
-
-        joinBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                JSONObject test = new JSONObject();
-                JSONObject data = new JSONObject();
-
-                try {
-                    test.put("type", "event");
-                    test.put("event", "joinGroup");
-                    //test.put("ackId", 1);
-                    test.put("dataType", "json");
-                    data.put("username",  AuthTokenService.getPayloadData("username"));
-                    data.put("group", "testGroup");
-                    test.put("data", data);
-                } catch(JSONException e){
-
-                }
-
             }
         });
 

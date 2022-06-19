@@ -185,7 +185,7 @@ public class ChatService {
         Volley.newRequestQueue(context).add(stringRequest);
     }
 
-    public static void sendImage(Context context, String group, String message){
+    public static void sendMessage(Context context, String group, String message){
         Log.e("info", "send image");
         JSONObject test = new JSONObject();
         JSONObject data = new JSONObject();
