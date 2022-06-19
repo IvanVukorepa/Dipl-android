@@ -44,7 +44,7 @@ steps:
   inputs:
     serverEndpoint: 'diplomski appcenter connection'
     appSlug: 'ivukor00-fesb.hr/Dipl-android'
-    appFile: '$(build.artifactstagingdirectory)/**/*.ipa'
+    appFile: '$(build.artifactstagingdirectory)/**/*.apk'
     buildVersion: '1'
     symbolsOption: 'Android'
     releaseNotesOption: 'input'
