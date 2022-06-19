@@ -37,7 +37,7 @@ steps:
     apkFiles: '**/*.apk'
     apksignerKeystoreFile: 'my-release-key.keystore'
     apksignerKeystorePassword: '$(password)'
-    apksignerKeystoreAlias: 'pair'
+    apksignerKeystoreAlias: 'alias_name'
     apksignerKeyPassword: '$(password)'
 
   
