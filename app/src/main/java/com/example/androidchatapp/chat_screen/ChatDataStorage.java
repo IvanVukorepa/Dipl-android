@@ -1,6 +1,8 @@
 package com.example.androidchatapp.chat_screen;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.example.androidchatapp.DB.MessageDatabse;
@@ -16,13 +18,13 @@ public class ChatDataStorage {
 
     public static ArrayList<Message> messages = new ArrayList<>();
 
-    public static void fillData(final Context context, final chatAdapter adapter, String chatName){
+    public static void fillData(final Context context, final chatAdapter adapter, String chatName, String username){
         if (chatName.equals(""))
             return;
         MessagesDataSource msgDataSource = new MessagesDataSource(context);
 
         msgDataSource.open();
-        ArrayList<MessageDatabse> messagesDB = msgDataSource.getAllMessagesForChat(AuthTokenService.getPayloadData("username"), chatName);
+        ArrayList<MessageDatabse> messagesDB = msgDataSource.getAllMessagesForChat(username, chatName);
         msgDataSource.close();
 
         messages.clear();
@@ -34,13 +36,14 @@ public class ChatDataStorage {
         adapter.notifyDataSetChanged();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static void addMessage(Context context, final PubSubData data, chatAdapter adapter){
         if (ChatService.chat.group.equals(data.group)){
             messages.add(data.data);
             adapter.notifyDataSetChanged();
         } else{
             //show notification as we are in a different chat
-            ChatService.showNotification(context);
+            ChatService.showNotification(context, data.data.user, data.data.message.substring(0, Math.min(data.data.message.length(), 30)), data.group);
         }
     }
 }

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -25,6 +27,7 @@ import com.example.androidchatapp.Services.AuthTokenService;
 import com.example.androidchatapp.Services.ChatService;
 import com.example.androidchatapp.Services.ImageHandler;
 import com.example.androidchatapp.Services.Message;
+import com.example.androidchatapp.Services.MyPreferences;
 import com.example.androidchatapp.Services.PubSubData;
 import com.example.androidchatapp.Services.TestService;
 import com.example.androidchatapp.create_group_screen.CreateGroup;
@@ -47,6 +50,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -70,8 +74,30 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int userGroupPosition = intent.getIntExtra("userGroupPosition", -1);
 
-        ChatService.chat = ChatListDataStorage.chats.get(userGroupPosition);
+        if (userGroupPosition == -1) {
+            String s = intent.getStringExtra("group");
+            if (s == null){
+                Log.e("chatactivity", "group string is null");
+            }
+            Log.e("stringextra - group ", s);
+            if(ChatListDataStorage.chats == null || ChatListDataStorage.chats.size() == 0){
+                MyPreferences preferences = new MyPreferences(getApplicationContext());
+                String username = preferences.getString("Username");
+                ChatService.chat = new UserGroup(username, s, "AndroidChatApp");
+            } else {
+                for (UserGroup ug: ChatListDataStorage.chats){
+                    Log.e("chatactivity", "group ug " + ug.group + " " + ug.chatName);
+                    if (ug.group.equals(s)){
+                        ChatService.chat = ug;
+                        break;
+                    }
+                }
+            }
+        } else {
+            ChatService.chat = ChatListDataStorage.chats.get(userGroupPosition);
+        }
         setTitle(ChatService.chat.chatName);
+        Log.e("chatactivity", "oncreate");
 
         testBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,7 +210,11 @@ public class ChatActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
-        ChatDataStorage.fillData(getApplicationContext(), adapter, ChatService.chat.group);
+        Log.e("chatactivity", "username " + ChatService.chat.username );
+        Log.e("chatactivity", "group " + ChatService.chat.group );
+        Log.e("chatactivity", "chatname " + ChatService.chat.chatName);
+
+        ChatDataStorage.fillData(getApplicationContext(), adapter, ChatService.chat.group, ChatService.chat.username);
         chatMessagesLV.smoothScrollToPosition(ChatDataStorage.messages.size());
     }
 
@@ -202,6 +232,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void test(PubSubData data){
         //handle event connected

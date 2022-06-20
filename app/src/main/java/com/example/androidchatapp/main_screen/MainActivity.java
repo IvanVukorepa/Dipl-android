@@ -2,7 +2,9 @@ package com.example.androidchatapp.main_screen;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -155,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void test(PubSubData data){
         Log.e("test", data.data.user + " " + data.data.message);
@@ -169,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             groupsDataSource.addGroupToDB(data.group, AuthTokenService.getPayloadData("username"), data.data.time);
             groupsDataSource.close();
         }
-        ChatService.showNotification(getApplicationContext());
+        ChatService.showNotification(getApplicationContext(), data.data.user, data.data.message.substring(0, Math.min(data.data.message.length(), 30)), data.group);
     }
 
     private boolean groupExists(String group) {

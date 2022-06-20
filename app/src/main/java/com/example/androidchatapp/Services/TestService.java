@@ -2,7 +2,9 @@ package com.example.androidchatapp.Services;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.os.Build;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Process;
+import android.speech.SpeechRecognizer;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -37,7 +40,9 @@ import com.example.androidchatapp.Models.Group;
 import com.example.androidchatapp.Models.UserGroup;
 import com.example.androidchatapp.Models.UserGroupMessages;
 import com.example.androidchatapp.R;
+import com.example.androidchatapp.chat_screen.ChatActivity;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
+import com.example.androidchatapp.main_screen.MainActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -230,15 +235,26 @@ public class TestService extends Service {
         return preferences.getString("Username");
     }
 
-    public static void showNotification(Context context){
+    public static void showNotification(Context context, String sender, String message, String group){
         Log.i("service", "show notification");
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
+        taskStackBuilder.addParentStack(MainActivity.class);
+
+        Intent chatintent = new Intent(context, ChatActivity.class);
+        chatintent.putExtra("group", group);
+        taskStackBuilder.addNextIntent(chatintent);
+        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
         String CHANNEL_ID = context.getString(R.string.channel_name);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Notification")
-                .setContentText("Notification test")
+                .setContentTitle(sender)
+                .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setDefaults(Notification.DEFAULT_VIBRATE);
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId++, builder.build());
@@ -261,7 +277,7 @@ public class TestService extends Service {
             EventBus.getDefault().post(data);
             //showNotification(getApplicationContext());
         } else{
-            showNotification(getApplicationContext());
+            showNotification(getApplicationContext(), data.data.user, data.data.message.substring(0, Math.min(data.data.message.length(), 30)), data.group);
         }
 
         MessagesDataSource msgDataSource = new MessagesDataSource(context);
@@ -371,6 +387,7 @@ public class TestService extends Service {
         GroupsDataSource groupsDataSource = new GroupsDataSource(getApplicationContext());
         groupsDataSource.open();
         Group group = groupsDataSource.getGroupData(groupName, username);
+        groupsDataSource.close();
 
         if (group == null)
             return "";

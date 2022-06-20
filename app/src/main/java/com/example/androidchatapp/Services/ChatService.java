@@ -1,9 +1,13 @@
 package com.example.androidchatapp.Services;
 
 import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Base64;
@@ -21,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.androidchatapp.Models.NewGroup;
 import com.example.androidchatapp.Models.UserGroup;
 import com.example.androidchatapp.R;
+import com.example.androidchatapp.chat_screen.ChatActivity;
 import com.example.androidchatapp.chat_screen.ChatDataStorage;
 import com.example.androidchatapp.main_screen.ChatListDataStorage;
 import com.example.androidchatapp.main_screen.ChatsListAdapter;
@@ -211,15 +216,27 @@ public class ChatService {
         context.startService(serviceIntent);
     }
 
-    public static void showNotification(Context context){
-        Log.i("service", "show notification");
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public static void showNotification(Context context, String sender, String message, String group){
+        Log.i("service", "show notification, group " + group);
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context);
+        taskStackBuilder.addParentStack(MainActivity.class);
+
+        Intent chatintent = new Intent(context, ChatActivity.class);
+        chatintent.putExtra("group", group);
+        taskStackBuilder.addNextIntent(chatintent);
+        PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
         String CHANNEL_ID = context.getString(R.string.channel_name);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Notification")
-                .setContentText("Notification test")
+                .setContentTitle(sender)
+                .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setDefaults(Notification.DEFAULT_VIBRATE);
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(notificationId++, builder.build());
