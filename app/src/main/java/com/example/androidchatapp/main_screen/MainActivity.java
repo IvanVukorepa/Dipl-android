@@ -69,9 +69,11 @@ public class MainActivity extends AppCompatActivity {
         // should probably be in Test/WebPubSub Service code
         //ChatService.rejoinGroups(getApplicationContext(), username);
 
-        Intent serviceIntent = new Intent(this, TestService.class);
-        Log.e("service", "intent start service WebPubSubConService");
-        startService(serviceIntent);
+        if (!username.isEmpty()) {
+            Intent serviceIntent = new Intent(this, TestService.class);
+            Log.e("service", "intent start service WebPubSubConService");
+            startService(serviceIntent);
+        }
     }
 
     private void startLoginIfNotLoggedIn() {

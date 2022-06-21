@@ -1,6 +1,7 @@
 package com.example.androidchatapp.chat_screen;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,6 +70,7 @@ public class chatAdapter extends BaseAdapter {
 
         chatMessage.setText(message);
         chatSender.setText(sender);
+
         if(!ChatDataStorage.messages.get(i).imageURI.equals("")){
             Log.e("chat view", "loading image from " + ChatDataStorage.messages.get(i).imageURI);
             Picasso.get().load(ChatDataStorage.messages.get(i).imageURI).into(imageView);

@@ -60,7 +60,6 @@ public class CreateGroupUserListAdapter extends BaseAdapter implements Filterabl
         } else{
             view.setBackgroundColor(Color.WHITE);
         }
-        //Picasso.get().load(myContext.getString(R.string.baseURL) + sport.getImageUrl()).into(imageTmb);
 
         return view;
     }
