@@ -1,5 +1,6 @@
 package com.example.androidchatapp.main_screen;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
