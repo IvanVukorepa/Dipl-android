@@ -235,14 +235,8 @@ public class ChatActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void test(PubSubData data){
-        //handle event connected
-        /*Gson gson = new Gson();
-        Type type = new TypeToken<PubSubData>(){}.getType();
-        PubSubData data = gson.fromJson(input, type);*/
-
         Log.e("test", data.data.user + " " + data.data.message);
 
         ChatDataStorage.addMessage(getApplicationContext(), data, adapter);
-        Toast.makeText(getApplicationContext(), data.data.message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -117,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String s) {
                 //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                 //request all possible chats from DB
-                Toast.makeText(getApplicationContext(), "query submit", Toast.LENGTH_SHORT).show();
-
                 UserService.getAll(getApplicationContext(), adapter, s);
                 ChatService.checkIfNewChat = true;
                 return false;

@@ -70,6 +70,7 @@ public class TestService extends Service {
     private static URI uri;
     private static String pubSubConnectionURL = "";
     private static int notificationId = 0;
+    private boolean retry = true;
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
@@ -148,6 +149,7 @@ public class TestService extends Service {
                         @Override
                         public void onOpen(ServerHandshake handshakedata) {
                             Log.e("faaf", "connection opened");
+                            retry = true;
                             ChatService.rejoinGroups(getApplicationContext(), username, getToken(getApplicationContext()));
                         }
 
@@ -160,6 +162,10 @@ public class TestService extends Service {
                         @Override
                         public void onClose(int code, String reason, boolean remote) {
                             Log.e("faaf", "client closed due to" + reason);
+                            if (retry){
+                                retry = false;
+                                createWebSocket();
+                            }
                         }
 
                         @Override
