@@ -12,7 +12,9 @@
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
         android:layout_weight="1"
-        android:id="@+id/chatMessagesList"/>
+        android:id="@+id/chatMessagesList"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
