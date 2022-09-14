@@ -195,7 +195,7 @@ public class ChatService {
         JSONObject data = new JSONObject();
         try {
             test.put("type", "event");
-            test.put("event", "testevent");
+            test.put("event", "message");
             test.put("dataType", "json");
             if(byteArr != null){
                 data.put("image",  Base64.encodeToString(byteArr, Base64.NO_WRAP));
